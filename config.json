@@ -7,8 +7,34 @@
     ],
     "servers": [
         {
-            "id": "server-1",
-            "name": "Production Server",
+            "id": "windows-events",
+            "name": "This Windows PC",
+            "type": "windows-event",
+            "logFiles": [
+                {
+                    "id": "win-system",
+                    "name": "System Log",
+                    "windowsLogName": "System",
+                    "maxEvents": 75
+                },
+                {
+                    "id": "win-application",
+                    "name": "Application Log",
+                    "windowsLogName": "Application",
+                    "maxEvents": 75
+                },
+                {
+                    "id": "win-security",
+                    "name": "Security Log",
+                    "windowsLogName": "Security",
+                    "maxEvents": 30
+                }
+            ]
+        },
+        {
+            "id": "production-server",
+            "name": "Production Server (SSH)",
+            "type": "ssh",
             "host": "192.168.1.100",
             "port": 22,
             "username": "root",
@@ -16,7 +42,7 @@
             "password": "your_password_here",
             "logFiles": [
                 {
-                    "id": "syslog",
+                    "id": "prod-syslog",
                     "name": "System Log",
                     "path": "/var/log/syslog"
                 },

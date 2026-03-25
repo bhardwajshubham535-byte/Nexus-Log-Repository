@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollBottomBtn = document.getElementById('scroll-bottom-btn');
 
     let socket = null;
+    let socketConnected = false;
     let autoScroll = true;
     let currentFilter = '';
 
@@ -116,38 +117,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initWebSocket(token) {
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        socket = new WebSocket(`${protocol}//${window.location.host}/ws?token=${token}`);
+        // Use socket.io client — the server is a socket.io server, not a raw WebSocket server
+        socket = io({
+            auth: { token }
+        });
 
-        socket.onopen = () => {
-            console.log("WebSocket connected");
-        };
+        socket.on('connect', () => {
+            socketConnected = true;
+            console.log('Socket.IO connected:', socket.id);
+        });
 
-        socket.onmessage = (event) => {
-            try {
-                const msg = JSON.parse(event.data);
-                if (msg.event === 'log-data') {
-                    appendLogContent(msg.data);
-                } else if (msg.event === 'log-info') {
-                    appendLogLine(`[SYSTEM] ${msg.data}`, 'info');
-                } else if (msg.event === 'log-error') {
-                    appendLogLine(`[ERROR] ${msg.data}`, 'error');
-                }
-            } catch (err) {
-                appendLogContent(event.data);
-            }
-        };
-
-        socket.onclose = (event) => {
-            console.log('WebSocket closed');
-            if (event.reason === 'Unauthorized') {
+        socket.on('disconnect', (reason) => {
+            socketConnected = false;
+            console.log('Socket.IO disconnected:', reason);
+            if (reason === 'Unauthorized') {
                 logoutBtn.click();
             }
-        };
+        });
 
-        socket.onerror = (err) => {
-            console.error('Socket error:', err);
-        };
+        socket.on('connect_error', (err) => {
+            socketConnected = false;
+            console.error('Socket.IO connection error:', err.message);
+            appendLogLine(`[ERROR] Connection failed: ${err.message}`, 'error');
+        });
+
+        // Listen for log events emitted by the server
+        socket.on('log-data', (data) => {
+            appendLogContent(data);
+        });
+
+        socket.on('log-info', (data) => {
+            appendLogLine(`[SYSTEM] ${data}`, 'info');
+        });
+
+        socket.on('log-error', (data) => {
+            appendLogLine(`[ERROR] ${data}`, 'error');
+        });
     }
 
     function selectLog(server, log) {
@@ -157,14 +162,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         appendLogLine(`[SYSTEM] Initializing connection to ${server.name}...`, 'info');
 
-        if (socket && socket.readyState === WebSocket.OPEN) {
-            socket.send(JSON.stringify({
-                event: 'start-stream',
+        if (socket && socketConnected) {
+            socket.emit('start-stream', {
                 serverId: server.id,
                 logId: log.id
-            }));
+            });
         } else {
-            appendLogLine(`[ERROR] WebSocket not connected`, 'error');
+            appendLogLine(`[ERROR] Not connected to server. Please refresh and log in again.`, 'error');
         }
     }
 
