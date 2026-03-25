@@ -54,15 +54,44 @@
             <header class="top-bar">
                 <div class="current-log-info">
                     <span id="current-server-badge" class="badge">No server</span>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span id="status-text">System Idle</span>
+                    </div>
                     <h2 id="current-log-title">Select a log file</h2>
                 </div>
-                <div class="controls">
+                <div class="dashboard-toggle-group">
+                   <button id="toggle-dashboard" class="btn-icon">📊</button>
                     <div class="search-box">
                         <input type="text" id="log-filter" placeholder="Filter logs...">
                         <span class="search-icon">🔍</span>
                     </div>
                 </div>
             </header>
+
+            <!-- Alerts Dashboard Section -->
+            <div id="alerts-dashboard" class="dashboard-grid hidden">
+                <div class="stat-card">
+                    <div class="stat-label">5m Window</div>
+                    <div id="stat-5m" class="stat-value">0</div>
+                    <div class="stat-trend">log events</div>
+                </div>
+                <div class="stat-card highlight">
+                    <div class="stat-label">15m Window</div>
+                    <div id="stat-15m" class="stat-value">0</div>
+                    <div class="stat-trend">log events</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">30m Window</div>
+                    <div id="stat-30m" class="stat-value">0</div>
+                    <div class="stat-trend">log events</div>
+                </div>
+                <div class="stat-card critical">
+                    <div class="stat-label">Active Alerts</div>
+                    <div id="stat-alerts" class="stat-value">0</div>
+                    <div class="stat-trend">last 30m</div>
+                </div>
+            </div>
 
             <div class="log-container">
                 <div id="log-output" class="log-output">
