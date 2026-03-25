@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Log Viewer</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Login View -->
+    <div id="login-view" class="view-container">
+        <div class="glass-panel login-panel">
+            <div class="logo">
+                <div class="pulse-ring"></div>
+                <h1>NEXUS</h1>
+            </div>
+            <p class="subtitle">Secure Log Authentication</p>
+            <form id="login-form">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn-primary">Connect System</button>
+            </form>
+            <div id="login-error" class="error-text"></div>
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="view-container hidden">
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <h2>NEXUS</h2>
+            </div>
+            <div class="sidebar-content">
+                <h3>Servers & Logs</h3>
+                <div id="server-list" class="server-tree">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn-secondary">Disconnect</button>
+            </div>
+        </aside>
+
+        <main class="main-content glass-panel">
+            <header class="top-bar">
+                <div class="current-log-info">
+                    <span id="current-server-badge" class="badge">No server</span>
+                    <h2 id="current-log-title">Select a log file</h2>
+                </div>
+                <div class="controls">
+                    <div class="search-box">
+                        <input type="text" id="log-filter" placeholder="Filter logs...">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="log-container">
+                <div id="log-output" class="log-output">
+                    <!-- Streamed logs appear here -->
+                </div>
+                <button id="scroll-bottom-btn" class="fab floating hidden">↓</button>
+            </div>
+        </main>
+    </div>
+
+
+    <script src="app.js"></script>
+</body>
+
+</html>

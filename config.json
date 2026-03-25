@@ -1,0 +1,32 @@
+{
+    "users": [
+        {
+            "username": "admin",
+            "password": "admin123"
+        }
+    ],
+    "servers": [
+        {
+            "id": "server-1",
+            "name": "Production Server",
+            "host": "192.168.1.100",
+            "port": 22,
+            "username": "root",
+            "authType": "password",
+            "password": "your_password_here",
+            "logFiles": [
+                {
+                    "id": "syslog",
+                    "name": "System Log",
+                    "path": "/var/log/syslog"
+                },
+                {
+                    "id": "nginx-access",
+                    "name": "Nginx Access Log",
+                    "path": "/var/log/nginx/access.log"
+                }
+            ]
+        }
+    ],
+    "jwtSecret": "your_super_secret_jwt_key_change_me_in_production"
+}
